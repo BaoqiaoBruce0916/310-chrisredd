@@ -1,0 +1,101 @@
+---
+/**
+ * HighContrastToggle component
+ * Provides an accessible toggle button for enabling/disabling high-contrast mode.
+ * The setting persists across page reloads using localStorage.
+ */
+---
+
+<button
+  id="high-contrast-toggle"
+  type="button"
+  class="px-3 py-2 rounded-lg bg-slate-700 text-slate-100 hover:bg-slate-600 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors duration-200 text-sm font-medium"
+  aria-pressed="false"
+  aria-label="Toggle high contrast mode"
+  data-testid="high-contrast-toggle"
+>
+  <span aria-hidden="true">🌗</span>
+  <span class="ml-2">High Contrast</span>
+</button>
+
+<script is:inline>
+  /**
+   * Initialize high-contrast mode from localStorage and set up toggle functionality.
+   * This script runs on every page load to restore the user's preference.
+   */
+  (function initializeHighContrast() {
+    const toggle = document.getElementById('high-contrast-toggle');
+    const html = document.documentElement;
+    
+    if (!toggle) {
+      console.error('High contrast toggle button not found');
+      return;
+    }
+
+    // Check localStorage for saved preference
+    const savedPreference = localStorage.getItem('high-contrast-mode');
+    
+    // Only use saved preference if explicitly set, otherwise default to normal contrast
+    const isHighContrast = savedPreference === 'true';
+
+    // Apply initial state
+    if (isHighContrast) {
+      html.setAttribute('data-high-contrast', 'true');
+      toggle.setAttribute('aria-pressed', 'true');
+    } else {
+      html.removeAttribute('data-high-contrast');
+      toggle.setAttribute('aria-pressed', 'false');
+    }
+
+    // Toggle handler
+    toggle.addEventListener('click', () => {
+      const currentState = html.getAttribute('data-high-contrast') === 'true';
+      const newState = !currentState;
+
+      // Update DOM
+      if (newState) {
+        html.setAttribute('data-high-contrast', 'true');
+        toggle.setAttribute('aria-pressed', 'true');
+      } else {
+        html.removeAttribute('data-high-contrast');
+        toggle.setAttribute('aria-pressed', 'false');
+      }
+
+      // Persist to localStorage
+      localStorage.setItem('high-contrast-mode', String(newState));
+
+      // Announce change to screen readers
+      const announcement = document.createElement('div');
+      announcement.setAttribute('role', 'status');
+      announcement.setAttribute('aria-live', 'polite');
+      announcement.className = 'sr-only';
+      announcement.textContent = `High contrast mode ${newState ? 'enabled' : 'disabled'}`;
+      document.body.appendChild(announcement);
+      setTimeout(() => announcement.remove(), 1000);
+    });
+
+    // Listen for system preference changes (only if user hasn't set a manual preference)
+    window.matchMedia('(prefers-contrast: more)').addEventListener('change', (e) => {
+      if (localStorage.getItem('high-contrast-mode') === null) {
+        // User prefers high contrast systemwide but hasn't made an explicit choice
+        // Keep the default (normal) but they can toggle if they want
+        return;
+      }
+    });
+  })();
+</script>
+
+<style>
+  /* Screen reader only class for announcements */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+</style>

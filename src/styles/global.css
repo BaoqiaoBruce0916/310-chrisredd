@@ -1,1 +1,303 @@
 @import "tailwindcss";
+
+/**
+ * Light Mode Styles
+ * Activated when html[data-light-mode="true"] is set
+ * Provides a bright, clean interface as an alternative to the default dark theme
+ * Works independently of high-contrast mode
+ */
+
+/* Light mode color overrides */
+html[data-light-mode="true"] {
+  /* Background colors - light grays and whites */
+  --light-bg-primary: #ffffff;
+  --light-bg-secondary: #f8fafc;
+  --light-bg-tertiary: #f1f5f9;
+  --light-bg-card: #ffffff;
+  
+  /* Text colors - dark grays for readability */
+  --light-text-primary: #0f172a;
+  --light-text-secondary: #334155;
+  --light-text-muted: #64748b;
+  
+  /* Border colors */
+  --light-border: #e2e8f0;
+  --light-border-hover: #cbd5e1;
+  
+  /* Accent colors - darker for WCAG AA compliance (4.5:1 contrast on white) */
+  --light-accent-blue: #1d4ed8;
+  --light-accent-purple: #7c3aed;
+  --light-accent-hover: #1e40af;
+  
+  /* Focus indicators */
+  --light-focus-ring: #2563eb;
+}
+
+/* Apply light mode styles when data attribute is present */
+html[data-light-mode="true"] body {
+  background-color: var(--light-bg-primary);
+  color: var(--light-text-primary);
+}
+
+/* Headers and navigation */
+html[data-light-mode="true"] header {
+  background-color: var(--light-accent-blue) !important;
+  color: white;
+}
+
+/* Main content area */
+html[data-light-mode="true"] main {
+  background-color: var(--light-bg-primary);
+  color: var(--light-text-primary);
+}
+
+/* Cards and containers */
+html[data-light-mode="true"] [class*="bg-slate-8"],
+html[data-light-mode="true"] [class*="bg-slate-9"] {
+  background-color: var(--light-bg-card) !important;
+  border-color: var(--light-border) !important;
+  color: var(--light-text-primary) !important;
+}
+
+html[data-light-mode="true"] a[data-testid="game-card"] {
+  background-color: var(--light-bg-card) !important;
+  border-color: var(--light-border) !important;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+}
+
+html[data-light-mode="true"] a[data-testid="game-card"]:hover {
+  border-color: var(--light-accent-blue) !important;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+/* Text colors in light mode */
+html[data-light-mode="true"] [class*="text-slate-1"],
+html[data-light-mode="true"] [class*="text-slate-2"],
+html[data-light-mode="true"] [class*="text-slate-3"] {
+  color: var(--light-text-primary) !important;
+}
+
+html[data-light-mode="true"] [class*="text-slate-4"] {
+  color: var(--light-text-muted) !important;
+}
+
+html[data-light-mode="true"] [class*="text-blue"] {
+  color: var(--light-accent-blue) !important;
+}
+
+html[data-light-mode="true"] [class*="text-purple"] {
+  color: var(--light-accent-purple) !important;
+}
+
+/* Links */
+html[data-light-mode="true"] a {
+  color: var(--light-accent-blue);
+}
+
+html[data-light-mode="true"] a:hover {
+  color: var(--light-accent-hover);
+}
+
+/* Buttons */
+html[data-light-mode="true"] button {
+  background-color: var(--light-bg-tertiary) !important;
+  color: var(--light-text-primary) !important;
+  border-color: var(--light-border) !important;
+}
+
+html[data-light-mode="true"] button:hover {
+  background-color: var(--light-bg-secondary) !important;
+  border-color: var(--light-border-hover) !important;
+}
+
+/* Focus indicators */
+html[data-light-mode="true"] *:focus {
+  outline-color: var(--light-focus-ring) !important;
+}
+
+/* Tags and badges */
+html[data-light-mode="true"] [class*="bg-blue-"],
+html[data-light-mode="true"] [class*="bg-purple-"] {
+  background-color: var(--light-bg-tertiary) !important;
+  border-color: var(--light-border) !important;
+  color: var(--light-text-primary) !important;
+}
+
+/* Menu and navigation */
+html[data-light-mode="true"] nav {
+  background-color: var(--light-bg-card) !important;
+  color: var(--light-text-primary) !important;
+}
+
+html[data-light-mode="true"] nav a {
+  color: var(--light-text-primary);
+}
+
+html[data-light-mode="true"] nav a:hover {
+  background-color: var(--light-bg-tertiary) !important;
+}
+
+/**
+ * High Contrast Mode Styles
+ * Activated when html[data-high-contrast="true"] is set
+ * Provides enhanced contrast ratios (7:1 or better) for improved accessibility
+ */
+
+/* High contrast color overrides */
+html[data-high-contrast="true"] {
+  /* Background colors - pure black for maximum contrast */
+  --hc-bg-primary: #000000;
+  --hc-bg-secondary: #0a0a0a;
+  --hc-bg-tertiary: #1a1a1a;
+  
+  /* Text colors - pure white for maximum contrast */
+  --hc-text-primary: #ffffff;
+  --hc-text-secondary: #f0f0f0;
+  --hc-text-muted: #d0d0d0;
+  
+  /* Border colors - high contrast borders */
+  --hc-border: #ffffff;
+  --hc-border-subtle: #cccccc;
+  
+  /* Accent colors - highly visible */
+  --hc-accent-blue: #00d4ff;
+  --hc-accent-purple: #d580ff;
+  --hc-accent-hover: #00ffff;
+  
+  /* Focus indicators */
+  --hc-focus-ring: #ffff00;
+}
+
+/* Apply high contrast styles when data attribute is present */
+html[data-high-contrast="true"] body {
+  background-color: var(--hc-bg-primary);
+  color: var(--hc-text-primary);
+}
+
+/* Headers and navigation */
+html[data-high-contrast="true"] header {
+  background-color: var(--hc-bg-secondary) !important;
+  border-bottom: 2px solid var(--hc-border);
+}
+
+/* Main content area */
+html[data-high-contrast="true"] main {
+  background-color: var(--hc-bg-primary);
+  color: var(--hc-text-primary);
+}
+
+/* Cards and containers */
+html[data-high-contrast="true"] [class*="bg-slate"] {
+  background-color: var(--hc-bg-secondary) !important;
+  border: 2px solid var(--hc-border-subtle) !important;
+}
+
+html[data-high-contrast="true"] a[data-testid="game-card"] {
+  background-color: var(--hc-bg-secondary) !important;
+  border: 2px solid var(--hc-border-subtle) !important;
+}
+
+html[data-high-contrast="true"] a[data-testid="game-card"]:hover {
+  border-color: var(--hc-accent-hover) !important;
+  background-color: var(--hc-bg-tertiary) !important;
+}
+
+/* Text colors */
+html[data-high-contrast="true"] [class*="text-slate"] {
+  color: var(--hc-text-primary) !important;
+}
+
+html[data-high-contrast="true"] [class*="text-blue"],
+html[data-high-contrast="true"] [class*="text-purple"] {
+  color: var(--hc-accent-blue) !important;
+}
+
+/* Links */
+html[data-high-contrast="true"] a {
+  color: var(--hc-accent-blue);
+  text-decoration: underline;
+}
+
+html[data-high-contrast="true"] a:hover {
+  color: var(--hc-accent-hover);
+}
+
+/* Buttons */
+html[data-high-contrast="true"] button {
+  background-color: var(--hc-bg-tertiary) !important;
+  color: var(--hc-text-primary) !important;
+  border: 2px solid var(--hc-border) !important;
+}
+
+html[data-high-contrast="true"] button:hover {
+  background-color: var(--hc-bg-secondary) !important;
+  border-color: var(--hc-accent-hover) !important;
+}
+
+/* Focus indicators - highly visible yellow ring */
+html[data-high-contrast="true"] *:focus {
+  outline: 3px solid var(--hc-focus-ring) !important;
+  outline-offset: 2px;
+}
+
+html[data-high-contrast="true"] *:focus-visible {
+  outline: 3px solid var(--hc-focus-ring) !important;
+  outline-offset: 2px;
+}
+
+/* Tags and badges */
+html[data-high-contrast="true"] [class*="bg-blue"],
+html[data-high-contrast="true"] [class*="bg-purple"] {
+  background-color: var(--hc-bg-tertiary) !important;
+  border: 2px solid var(--hc-border-subtle) !important;
+  color: var(--hc-text-primary) !important;
+}
+
+/* Form elements */
+html[data-high-contrast="true"] input,
+html[data-high-contrast="true"] textarea,
+html[data-high-contrast="true"] select {
+  background-color: var(--hc-bg-secondary) !important;
+  color: var(--hc-text-primary) !important;
+  border: 2px solid var(--hc-border) !important;
+}
+
+/* Shadows - remove in high contrast as they reduce clarity */
+html[data-high-contrast="true"] [class*="shadow"] {
+  box-shadow: none !important;
+}
+
+/* Gradients - replace with solid colors */
+html[data-high-contrast="true"] [class*="gradient"] {
+  background-image: none !important;
+  background-color: var(--hc-bg-secondary) !important;
+}
+
+/* Backdrop blur - remove for clarity */
+html[data-high-contrast="true"] [class*="backdrop-blur"] {
+  backdrop-filter: none !important;
+}
+
+/* Ensure sufficient spacing around interactive elements */
+html[data-high-contrast="true"] button,
+html[data-high-contrast="true"] a[role="button"],
+html[data-high-contrast="true"] [role="button"] {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0.75rem 1rem;
+}
+
+/* Menu and navigation */
+html[data-high-contrast="true"] nav {
+  background-color: var(--hc-bg-secondary) !important;
+  border: 2px solid var(--hc-border) !important;
+}
+
+html[data-high-contrast="true"] nav a {
+  color: var(--hc-text-primary);
+}
+
+html[data-high-contrast="true"] nav a:hover {
+  background-color: var(--hc-bg-tertiary) !important;
+  color: var(--hc-accent-hover);
+}

@@ -56,7 +56,10 @@ This is a crowdfunding platform for games with a developer theme. The applicatio
 ### Styling
 
 - Use Tailwind CSS utility classes exclusively - see `style.instructions.md`
-- Dark theme colors: slate palette (`bg-slate-800`, `text-slate-100`, etc.)
+- **Theme System**: The site supports both dark/light mode and normal/high-contrast mode, which work independently
+  - Dark mode (default) uses the slate palette (`bg-slate-800`, `text-slate-100`, etc.)
+  - Light mode (toggled via `data-light-mode` attribute on `<html>`) uses light backgrounds with darker, accessible accent colors
+  - High-contrast mode (toggled via `data-high-contrast` attribute on `<html>`) provides 7:1+ contrast ratios with CSS overrides in `global.css`
 - Rounded corners and modern UI patterns
 - Follow modern UI/UX principles with clean, accessible interfaces
 
