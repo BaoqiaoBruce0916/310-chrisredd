@@ -1,0 +1,106 @@
+---
+/**
+ * LightModeToggle component
+ * Provides an accessible toggle button for switching between dark and light mode.
+ * The setting persists across page reloads using localStorage.
+ * Works independently of high-contrast mode.
+ */
+---
+
+<button
+  id="light-mode-toggle"
+  type="button"
+  class="px-3 py-2 rounded-lg bg-slate-700 text-slate-100 hover:bg-slate-600 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors duration-200 text-sm font-medium"
+  aria-pressed="false"
+  aria-label="Toggle light mode"
+  data-testid="light-mode-toggle"
+>
+  <span aria-hidden="true">☀️</span>
+  <span class="ml-2">Light Mode</span>
+</button>
+
+<script is:inline>
+  /**
+   * Initialize light mode from localStorage and set up toggle functionality.
+   * This script runs on every page load to restore the user's preference.
+   */
+  (function initializeLightMode() {
+    const toggle = document.getElementById('light-mode-toggle');
+    const html = document.documentElement;
+    
+    if (!toggle) {
+      console.error('Light mode toggle button not found');
+      return;
+    }
+
+    // Check localStorage for saved preference
+    const savedPreference = localStorage.getItem('light-mode');
+    
+    // Only use saved preference if explicitly set, otherwise default to dark
+    const isLightMode = savedPreference === 'true';
+
+    // Apply initial state
+    if (isLightMode) {
+      html.setAttribute('data-light-mode', 'true');
+      html.classList.remove('dark');
+      toggle.setAttribute('aria-pressed', 'true');
+    } else {
+      html.classList.add('dark');
+      html.removeAttribute('data-light-mode');
+      toggle.setAttribute('aria-pressed', 'false');
+    }
+
+    // Toggle handler
+    toggle.addEventListener('click', () => {
+      const currentState = html.getAttribute('data-light-mode') === 'true';
+      const newState = !currentState;
+
+      // Update DOM
+      if (newState) {
+        html.setAttribute('data-light-mode', 'true');
+        html.classList.remove('dark');
+        toggle.setAttribute('aria-pressed', 'true');
+      } else {
+        html.removeAttribute('data-light-mode');
+        html.classList.add('dark');
+        toggle.setAttribute('aria-pressed', 'false');
+      }
+
+      // Persist to localStorage
+      localStorage.setItem('light-mode', String(newState));
+
+      // Announce change to screen readers
+      const announcement = document.createElement('div');
+      announcement.setAttribute('role', 'status');
+      announcement.setAttribute('aria-live', 'polite');
+      announcement.className = 'sr-only';
+      announcement.textContent = `${newState ? 'Light' : 'Dark'} mode enabled`;
+      document.body.appendChild(announcement);
+      setTimeout(() => announcement.remove(), 1000);
+    });
+
+    // Listen for system preference changes (only if user hasn't set a manual preference)
+    window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', (e) => {
+      if (localStorage.getItem('light-mode') === null) {
+        // User prefers light mode systemwide but hasn't made an explicit choice
+        // Keep the default (dark) but they can toggle if they want
+        return;
+      }
+    });
+  })();
+</script>
+
+<style>
+  /* Screen reader only class for announcements */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+</style>

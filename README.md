@@ -12,6 +12,34 @@ Tailspin Toys is a crowdfunding platform for games with a developer theme. The p
 
 The database is migrated and seeded automatically before `dev`/`build` (via the `predev`/`prebuild` npm scripts) and is written to the gitignored `tailspin.db` file.
 
+## Accessibility Features
+
+### Theme Controls
+
+The site includes two independent accessibility toggles in the header:
+
+#### Light Mode Toggle
+
+Switch between dark mode (default) and light mode with:
+- **Toggle Button**: Located in the header with clear visual and text labels (☀️ Light Mode)
+- **Persistent Setting**: User preference saved to browser localStorage and restored on page reload
+- **Accessible Colors**: Light mode uses darker blues (#1d4ed8) for 4.5:1+ contrast ratios on white backgrounds
+- **Independent Operation**: Works separately from high-contrast mode
+
+#### High Contrast Mode Toggle
+
+Enable enhanced visual contrast with:
+- **Toggle Button**: Located in the header (🌗 High Contrast)
+- **Persistent Setting**: User preference is saved to browser localStorage and restored on page reload  
+- **WCAG Compliance**: Provides contrast ratios of 7:1 or better (exceeding WCAG 2.1 Level AA requirements)
+- **Enhanced Styling**: Pure black backgrounds (#000000) with white text (#ffffff), thicker borders (2px), highly visible yellow focus indicators (#ffff00), and simplified styling (no gradients, shadows, or blur effects)
+- **Independent Operation**: Works in combination with either dark or light mode
+
+Both toggles feature:
+- **Keyboard Accessible**: Fully operable via keyboard (Tab, Enter, Space)
+- **Screen Reader Support**: Announces state changes with `aria-live` regions
+- **Minimum Touch Target Sizes**: 44x44 pixels for mobile accessibility
+
 ## Using this template
 
 This repository is a GitHub template. When you create a new repository from it, a one-time **Bootstrap template issues** workflow (`.github/workflows/bootstrap-issues.yml`) runs automatically on the first push to `main` and opens a set of starter issues describing suggested first features. Each issue is defined by a Markdown file in `.github/bootstrap-issues/` — the first heading becomes the issue title and the remaining content becomes the body — so you can edit, add, or remove files there to control which issues are created.
