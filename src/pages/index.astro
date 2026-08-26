@@ -5,10 +5,31 @@ import PageHero from '../components/PageHero.astro';
 import EmptyState from '../components/EmptyState.astro';
 import { getDatabase } from '../lib/db';
 import { getAllGames } from '../lib/games';
+import { getAllCategories } from '../lib/categories';
+import { getAllPublishers } from '../lib/publishers';
 
 export const prerender = true;
 
-const games = await getAllGames(getDatabase());
+// Fetch all data at build time
+const db = getDatabase();
+const [games, categories, publishers] = await Promise.all([
+  getAllGames(db),
+  getAllCategories(db),
+  getAllPublishers(db),
+]);
+
+// Read filter parameters from URL for initial state
+const url = Astro.url;
+const categoryParams = url.searchParams.getAll('category');
+const publisherParams = url.searchParams.getAll('publisher');
+
+// Convert to numbers and filter out invalid values
+const categoryIds = categoryParams
+  .map(Number)
+  .filter((id) => !isNaN(id) && id > 0);
+const publisherIds = publisherParams
+  .map(Number)
+  .filter((id) => !isNaN(id) && id > 0);
 ---
 
 <Layout title="Tailspin Toys - Crowdfunding your new favorite game!">
@@ -18,16 +39,236 @@ const games = await getAllGames(getDatabase());
       subtitle="Find your next game! And maybe even back one! Explore our collection!"
     />
 
-    <div>
-      <h2 class="text-2xl font-medium mb-6 text-slate-100">Featured Games</h2>
-
-      {games.length === 0 ? (
-        <EmptyState text="No games available at the moment." />
-      ) : (
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" data-testid="games-grid">
-          {games.map((game) => <GameCard game={game} />)}
+    <!-- Filter Section -->
+    <div class="mb-8 bg-slate-800 rounded-xl p-6 shadow-lg">
+      <div class="flex flex-col lg:flex-row gap-6">
+        <!-- Category Filters -->
+        <div class="flex-1">
+          <h3 class="text-lg font-medium mb-3 text-slate-100">Filter by Category</h3>
+          <div class="space-y-2" role="group" aria-label="Category filters">
+            {categories.map((category) => (
+              <label class="flex items-center gap-2 cursor-pointer group">
+                <input
+                  type="checkbox"
+                  name="category"
+                  value={category.id}
+                  checked={categoryIds.includes(category.id)}
+                  data-testid={`filter-category-${category.id}`}
+                  class="w-4 h-4 rounded border-slate-600 bg-slate-700 text-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none cursor-pointer"
+                />
+                <span class="text-slate-200 group-hover:text-slate-100 transition-colors">
+                  {category.name}
+                </span>
+              </label>
+            ))}
+          </div>
         </div>
-      )}
+
+        <!-- Publisher Filters -->
+        <div class="flex-1">
+          <h3 class="text-lg font-medium mb-3 text-slate-100">Filter by Publisher</h3>
+          <div class="space-y-2" role="group" aria-label="Publisher filters">
+            {publishers.map((publisher) => (
+              <label class="flex items-center gap-2 cursor-pointer group">
+                <input
+                  type="checkbox"
+                  name="publisher"
+                  value={publisher.id}
+                  checked={publisherIds.includes(publisher.id)}
+                  data-testid={`filter-publisher-${publisher.id}`}
+                  class="w-4 h-4 rounded border-slate-600 bg-slate-700 text-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none cursor-pointer"
+                />
+                <span class="text-slate-200 group-hover:text-slate-100 transition-colors">
+                  {publisher.name}
+                </span>
+              </label>
+            ))}
+          </div>
+        </div>
+
+        <!-- Clear Filters Button -->
+        <div class="flex items-end">
+          <button
+            type="button"
+            id="clear-filters"
+            data-testid="clear-filters-button"
+            class="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-slate-100 rounded-lg transition-colors duration-200 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          >
+            Clear Filters
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <h2 class="text-2xl font-medium mb-6 text-slate-100" id="games-heading">
+        Featured Games
+      </h2>
+
+      <div id="empty-state" class="hidden">
+        <EmptyState text="No games match the selected filters." />
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" data-testid="games-grid" id="games-grid">
+        {games.map((game) => (
+          <div
+            class="game-card"
+            data-category-id={game.category?.id}
+            data-publisher-id={game.publisher?.id}
+          >
+            <GameCard game={game} />
+          </div>
+        ))}
+      </div>
     </div>
   </div>
+
+  <script>
+    // Client-side filtering for static site
+    // Filters games without page reload and updates URL for shareable links
+
+    interface FilterState {
+      categoryIds: Set<number>;
+      publisherIds: Set<number>;
+    }
+
+    // Initialize filter state from URL params
+    function getInitialFilterState(): FilterState {
+      const params = new URLSearchParams(window.location.search);
+      const categoryIds = new Set<number>();
+      const publisherIds = new Set<number>();
+
+      params.getAll('category').forEach((id) => {
+        const numId = Number(id);
+        if (!isNaN(numId) && numId > 0) {
+          categoryIds.add(numId);
+        }
+      });
+
+      params.getAll('publisher').forEach((id) => {
+        const numId = Number(id);
+        if (!isNaN(numId) && numId > 0) {
+          publisherIds.add(numId);
+        }
+      });
+
+      return { categoryIds, publisherIds };
+    }
+
+    let filterState = getInitialFilterState();
+
+    // Apply filters to show/hide games
+    function applyFilters() {
+      const gameCards = document.querySelectorAll<HTMLElement>('.game-card');
+      const gamesGrid = document.getElementById('games-grid');
+      const emptyState = document.getElementById('empty-state');
+      const heading = document.getElementById('games-heading');
+      let visibleCount = 0;
+
+      gameCards.forEach((card) => {
+        const categoryId = card.dataset.categoryId
+          ? Number(card.dataset.categoryId)
+          : null;
+        const publisherId = card.dataset.publisherId
+          ? Number(card.dataset.publisherId)
+          : null;
+
+        let show = true;
+
+        // If category filters are active, card must match at least one
+        if (filterState.categoryIds.size > 0) {
+          show = show && categoryId !== null && filterState.categoryIds.has(categoryId);
+        }
+
+        // If publisher filters are active, card must match at least one
+        if (filterState.publisherIds.size > 0) {
+          show = show && publisherId !== null && filterState.publisherIds.has(publisherId);
+        }
+
+        card.style.display = show ? '' : 'none';
+        if (show) visibleCount++;
+      });
+
+      // Update heading text
+      if (heading) {
+        heading.textContent =
+          filterState.categoryIds.size === 0 && filterState.publisherIds.size === 0
+            ? 'Featured Games'
+            : 'Filtered Games';
+      }
+
+      // Show/hide empty state
+      if (gamesGrid) {
+        gamesGrid.style.display = visibleCount > 0 ? '' : 'none';
+      }
+      if (emptyState) {
+        emptyState.style.display = visibleCount === 0 ? '' : 'none';
+      }
+    }
+
+    // Update URL with current filter state
+    function updateURL() {
+      const params = new URLSearchParams();
+
+      filterState.categoryIds.forEach((id) => {
+        params.append('category', String(id));
+      });
+
+      filterState.publisherIds.forEach((id) => {
+        params.append('publisher', String(id));
+      });
+
+      const newUrl = params.toString() ? `/?${params.toString()}` : '/';
+      window.history.replaceState({}, '', newUrl);
+    }
+
+    // Handle checkbox changes
+    function handleFilterChange(type: 'category' | 'publisher', id: number, checked: boolean) {
+      const targetSet = type === 'category' ? filterState.categoryIds : filterState.publisherIds;
+
+      if (checked) {
+        targetSet.add(id);
+      } else {
+        targetSet.delete(id);
+      }
+
+      applyFilters();
+      updateURL();
+    }
+
+    // Attach change handlers to all checkboxes
+    document.querySelectorAll<HTMLInputElement>('input[name="category"]').forEach((input) => {
+      input.addEventListener('change', () => {
+        handleFilterChange('category', Number(input.value), input.checked);
+      });
+    });
+
+    document.querySelectorAll<HTMLInputElement>('input[name="publisher"]').forEach((input) => {
+      input.addEventListener('change', () => {
+        handleFilterChange('publisher', Number(input.value), input.checked);
+      });
+    });
+
+    // Clear filters button
+    const clearButton = document.getElementById('clear-filters');
+    if (clearButton) {
+      clearButton.addEventListener('click', () => {
+        filterState.categoryIds.clear();
+        filterState.publisherIds.clear();
+
+        // Uncheck all checkboxes
+        document
+          .querySelectorAll<HTMLInputElement>('input[name="category"], input[name="publisher"]')
+          .forEach((input) => {
+            input.checked = false;
+          });
+
+        applyFilters();
+        updateURL();
+      });
+    }
+
+    // Apply initial filters on page load
+    applyFilters();
+  </script>
 </Layout>
