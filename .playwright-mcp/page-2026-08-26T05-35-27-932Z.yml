@@ -1,0 +1,99 @@
+- generic [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e4]:
+      - button "Toggle menu" [ref=e6]
+      - link "Tailspin Toys" [ref=e10] [cursor=pointer]:
+        - /url: /
+  - main [ref=e11]:
+    - generic [ref=e13]:
+      - generic [ref=e14]:
+        - heading "Welcome to Tailspin Toys" [level=1] [ref=e15]
+        - paragraph [ref=e16]: Find your next game! And maybe even back one! Explore our collection!
+      - generic [ref=e18]:
+        - generic [ref=e19]:
+          - heading "Filter by Category" [level=3] [ref=e20]
+          - group "Category filters" [ref=e21]:
+            - generic [ref=e22] [cursor=pointer]:
+              - checkbox "Action" [checked] [active] [ref=e23]
+              - generic [ref=e24]: Action
+            - generic [ref=e25] [cursor=pointer]:
+              - checkbox "Adventure" [ref=e26]
+              - generic [ref=e27]: Adventure
+            - generic [ref=e28] [cursor=pointer]:
+              - checkbox "Puzzle" [ref=e29]
+              - generic [ref=e30]: Puzzle
+            - generic [ref=e31] [cursor=pointer]:
+              - checkbox "Simulation" [ref=e32]
+              - generic [ref=e33]: Simulation
+            - generic [ref=e34] [cursor=pointer]:
+              - checkbox "Strategy" [ref=e35]
+              - generic [ref=e36]: Strategy
+        - generic [ref=e37]:
+          - heading "Filter by Publisher" [level=3] [ref=e38]
+          - group "Publisher filters" [ref=e39]:
+            - generic [ref=e40] [cursor=pointer]:
+              - checkbox "CodeForge Studios" [ref=e41]
+              - generic [ref=e42]: CodeForge Studios
+            - generic [ref=e43] [cursor=pointer]:
+              - checkbox "DevMasters Inc." [ref=e44]
+              - generic [ref=e45]: DevMasters Inc.
+            - generic [ref=e46] [cursor=pointer]:
+              - checkbox "GitHub Games" [ref=e47]
+              - generic [ref=e48]: GitHub Games
+            - generic [ref=e49] [cursor=pointer]:
+              - checkbox "Ops Interactive" [ref=e50]
+              - generic [ref=e51]: Ops Interactive
+        - button "Clear Filters" [ref=e53]
+      - generic [ref=e54]:
+        - heading "Filtered Games" [level=2] [ref=e374]
+        - generic [ref=e56]:
+          - link "Cloud Conqueror Action CodeForge Studios Cloud Conqueror thrusts you into a high-stakes aerial battle against rogue cloud services. With Mona as your co-pilot, navigate through stormy skies and outmaneuver digital adversaries in a quest to reclaim control over your virtual domain. Support this game through our crowdfunding platform! View details" [ref=e86] [cursor=pointer]:
+            - /url: /game/21
+            - generic [ref=e89]:
+              - heading "Cloud Conqueror" [level=3] [ref=e90]
+              - generic [ref=e91]:
+                - generic [ref=e92]: Action
+                - generic [ref=e93]: CodeForge Studios
+              - paragraph [ref=e94]: Cloud Conqueror thrusts you into a high-stakes aerial battle against rogue cloud services. With Mona as your co-pilot, navigate through stormy skies and outmaneuver digital adversaries in a quest to reclaim control over your virtual domain. Support this game through our crowdfunding platform!
+              - generic [ref=e95]: View details
+          - link "Repo Rampart Action GitHub Games Repo Rampart immerses you in adrenaline-charged defense missions where every command must protect your precious codebases. With Mona leading your strategy, prevent intrusions and execute swift countermeasures in electrifying action sequences. Support this game through our crowdfunding platform! View details" [ref=e240] [cursor=pointer]:
+            - /url: /game/19
+            - generic [ref=e243]:
+              - heading "Repo Rampart" [level=3] [ref=e244]
+              - generic [ref=e245]:
+                - generic [ref=e246]: Action
+                - generic [ref=e247]: GitHub Games
+              - paragraph [ref=e248]: Repo Rampart immerses you in adrenaline-charged defense missions where every command must protect your precious codebases. With Mona leading your strategy, prevent intrusions and execute swift countermeasures in electrifying action sequences. Support this game through our crowdfunding platform!
+              - generic [ref=e249]: View details
+          - link "Script Strike Action CodeForge Studios Script Strike propels you into a fast-paced coding battleground where every keystroke could change the tide of an intense conflict. Mona rallies your forces as you dive into real-time challenges that merge reflexes with smart script execution. Support this game through our crowdfunding platform! View details" [ref=e268] [cursor=pointer]:
+            - /url: /game/17
+            - generic [ref=e271]:
+              - heading "Script Strike" [level=3] [ref=e272]
+              - generic [ref=e273]:
+                - generic [ref=e274]: Action
+                - generic [ref=e275]: CodeForge Studios
+              - paragraph [ref=e276]: Script Strike propels you into a fast-paced coding battleground where every keystroke could change the tide of an intense conflict. Mona rallies your forces as you dive into real-time challenges that merge reflexes with smart script execution. Support this game through our crowdfunding platform!
+              - generic [ref=e277]: View details
+          - link "Syntax Smashdown Action Ops Interactive Syntax Smashdown offers an exhilarating arcade experience where rapid coding reflexes determine the outcome of explosive digital battles. Guided by the fearless Mona, your mission is to knock out glitches and secure the high-score in a realm where syntax is the ultimate weapon. Support this game through our crowdfunding platform! View details" [ref=e310] [cursor=pointer]:
+            - /url: /game/20
+            - generic [ref=e313]:
+              - heading "Syntax Smashdown" [level=3] [ref=e314]
+              - generic [ref=e315]:
+                - generic [ref=e316]: Action
+                - generic [ref=e317]: Ops Interactive
+              - paragraph [ref=e318]: Syntax Smashdown offers an exhilarating arcade experience where rapid coding reflexes determine the outcome of explosive digital battles. Guided by the fearless Mona, your mission is to knock out glitches and secure the high-score in a realm where syntax is the ultimate weapon. Support this game through our crowdfunding platform!
+              - generic [ref=e319]: View details
+          - link "Terminal Turbulence Action DevMasters Inc. Terminal Turbulence pits you against rapid-fire command line confrontations where timing and precision are of the essence. Let Mona’s digital savvy guide your response strategies as you navigate chaotic server environments in high-octane style. Support this game through our crowdfunding platform! View details" [ref=e324] [cursor=pointer]:
+            - /url: /game/18
+            - generic [ref=e327]:
+              - heading "Terminal Turbulence" [level=3] [ref=e328]
+              - generic [ref=e329]:
+                - generic [ref=e330]: Action
+                - generic [ref=e331]: DevMasters Inc.
+              - paragraph [ref=e332]: Terminal Turbulence pits you against rapid-fire command line confrontations where timing and precision are of the essence. Let Mona’s digital savvy guide your response strategies as you navigate chaotic server environments in high-octane style. Support this game through our crowdfunding platform!
+              - generic [ref=e333]: View details
+  - generic [ref=e353]:
+    - button [ref=e354]
+    - button [ref=e360]
+    - button [ref=e364]
+    - button [ref=e369]
